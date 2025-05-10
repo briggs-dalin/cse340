@@ -21,9 +21,9 @@ app.set("layout", "./layouts/layout"); // Not at view root
 /* ***********************
  * Routes
  *************************/
-app.set("view engine", "ejs")
-app.use(expressLayouts)
-app.set("layout", "./layouts/layout") // not at views root
+app.set("view engine", "ejs");
+app.use(expressLayouts);
+app.set("layout", "./layouts/layout"); // not at views root
 app.use(static);
 //Index route
 app.get("/", function(request, response) {
@@ -42,5 +42,5 @@ const host = process.env.HOST;
  * Log statement to confirm server operation
  *************************/
 app.listen(port, () => {
-  console.log(`app listening on ${host}:${port}`)
-})
+  console.log(`app listening on ${host}:${port}`);
+});
