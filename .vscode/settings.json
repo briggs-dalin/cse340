@@ -7,9 +7,13 @@
                 }
             },
             "previewLimit": 50,
-            "server": "localhost",
+            "server": "dpg-d0fo7uidbo4c73am96e0-a.oregon-postgres.render.com",
+            "port": 5432,
             "driver": "PostgreSQL",
-            "name": "Render.com",
+            "name": "CSE-Motors-DB",
+            "database":"cse340db_nx8d",
+            "username":"cse340db",
+            "password":"CzA1guQkaS7HRdgHnEXdKOcw8TRQXqeC",
             "connectString": "postgresql://cse340db:wyF9ujGsqCiOkES9LWNEejLtODLKCDWN@dpg-d0fo7uidbo4c73am96e0-a.oregon-postgres.render.com/cse340db_4mc0"
         }
     ]
