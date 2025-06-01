@@ -14,10 +14,10 @@ const env = require("dotenv").config();
 
 const baseController = require("./controllers/baseController");
 const inventoryRoute = require("./routes/inventoryRoute.js");
-const accountRoute = require("./routes/accountRoute.js")
+const accountRoute = require("./routes/accountRoute.js");
 const intentionalErrorRoute = require("./routes/intentionalErrorRoute.js");
 const utilities = require("./utilities/index.js");
-const pool = require('./database/')
+const pool = require('./database/');
 
 const app = express();
 const static = require("./routes/static");
