@@ -10,6 +10,7 @@ const expressLayouts = require("express-ejs-layouts");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const env = require("dotenv").config();
+const cookieParser = require("cookie-parser");
 
 
 const baseController = require("./controllers/baseController");
@@ -55,6 +56,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ // for parsing application/x-www-form-urlencoded
   extended: true
 }));
+
+// Cookie parser
+app.use(cookieParser())
+
+// JWT checker
+app.use(utilities.checkJWTToken);
 
 
 /* ***********************
