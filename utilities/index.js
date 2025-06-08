@@ -9,7 +9,6 @@ require("dotenv").config()
 Util.getNav = async function (req, res, next) {
     let data = await invModel.getClassifications();
   let list = "<ul>";
-  console.log(data);
   list += '<li><a href="/" title="Home page">Home</a></li>';
   data.rows.forEach((row) => {
     list += "<li>";
@@ -122,7 +121,7 @@ Util.buildItemListing = async function (data) {
     // listingHTML += '<img src="/images/notexist.jpg">'; // Introduce 404 error
   } else {
     listingHTML = `
-      <p>Sorry, not matching vehicles could be found.</p>
+      <p>Sorry, no matching vehicles could be found.</p>
     `;
   }
   return listingHTML;
@@ -131,8 +130,8 @@ Util.buildItemListing = async function (data) {
 
 /**
  * Build an HTML select element with classification data
- * @param {*} classification_id
- * @returns
+ * @param {int} classification_id
+ * @returns {string}
  */
 
 Util.buildClassificationList = async function (classification_id = null) {
@@ -151,7 +150,6 @@ Util.buildClassificationList = async function (classification_id = null) {
     classificationList += ">" + row.classification_name + "</option>";
   });
   classificationList += "</select>";
-  console.log(classificationList);
   return classificationList;
 };
 
@@ -188,6 +186,29 @@ Util.checkJWTToken = (req, res, next) => {
   }
 };
 
+/**
+ * Function to update the browser cookie.
+ * @param {object} accountData 
+ * @param {import("express").Response} res 
+ */
+
+Util.updateCookie = (accountData, res) => {
+  const accessToken = jwt.sign(
+    accountData,
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: 3600 }
+  );
+  if (process.env.NODE_ENV === "development") {
+    res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
+  } else {
+    res.cookie("jwt", accessToken, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 3600 * 1000,
+    });
+  }
+}
+
 /* ****************************************
  *  Check Login
  * ************************************ */
@@ -200,5 +221,33 @@ Util.checkLogin = (req, res, next) => {
   }
 };
 
+/* ****************************************
+ *  Check authorization
+ * ************************************ */
+Util.checkAuthorizationManager = (req, res, next) => {
+  if (req.cookies.jwt) {
+    jwt.verify(
+      req.cookies.jwt,
+      process.env.ACCESS_TOKEN_SECRET,
+      function (err, accountData) {
+        if (err) {
+          req.flash("Please log in");
+          res.clearCookie("jwt");
+          return res.redirect("/account/login");
+        }
+        if(accountData.account_type == "Employee" || accountData.account_type == "Admin") {
+          next();
+        }
+        else {
+          req.flash("notice", "You are not authorized to modify inventory.");
+          return res.redirect("/account/login");
+        }
+      }
+    );
+  } else {
+    req.flash("notice", "You are not authorized to modify inventory.");
+    return res.redirect("/account/login");
+  }
+}
 
 module.exports = Util;
