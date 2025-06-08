@@ -42,6 +42,31 @@ validate.registrationRules = () => {
 };
 
 /* **********************************
+ *  Update Account Data Validation Rules
+ * ********************************* */
+validate.updateRules = () => {
+  return [
+    body("account_firstname")
+      .trim()
+      .escape()
+      .notEmpty()
+      .withMessage("Please provide a first name."),
+    
+    body("account_lastname")
+      .trim()
+      .escape()
+      .notEmpty()
+      .withMessage("Please provide a last name."),
+
+    body("account_email")
+      .trim()
+      .isEmail()
+      .normalizeEmail()
+      .withMessage("A valid email is required.")
+  ];
+};
+
+/* **********************************
  *  Registration Data Validation Rules
  * ********************************* */
 validate.loginRules = () => {
